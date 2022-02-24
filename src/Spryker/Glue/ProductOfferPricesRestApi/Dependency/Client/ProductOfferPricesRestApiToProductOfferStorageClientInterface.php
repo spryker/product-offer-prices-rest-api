@@ -7,12 +7,12 @@
 
 namespace Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client;
 
-interface ProductOfferPricesRestApiToMerchantProductOfferStorageClientInterface
+interface ProductOfferPricesRestApiToProductOfferStorageClientInterface
 {
     /**
      * @param array<string> $productOfferReferences
      *
      * @return array<\Generated\Shared\Transfer\ProductOfferStorageTransfer>
      */
-    public function getProductOfferStorageByReferences(array $productOfferReferences): array;
+    public function getProductOfferStoragesByReferences(array $productOfferReferences): array;
 }
