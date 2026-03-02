@@ -18,9 +18,6 @@ class ProductOfferPriceExpander implements ProductOfferPriceExpanderInterface
      */
     protected $productOfferPriceReader;
 
-    /**
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Processor\Reader\ProductOfferPriceReaderInterface $productOfferPriceReader
-     */
     public function __construct(ProductOfferPriceReaderInterface $productOfferPriceReader)
     {
         $this->productOfferPriceReader = $productOfferPriceReader;

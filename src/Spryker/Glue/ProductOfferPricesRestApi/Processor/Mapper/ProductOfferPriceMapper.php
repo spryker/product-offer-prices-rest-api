@@ -28,12 +28,6 @@ class ProductOfferPriceMapper implements ProductOfferPriceMapperInterface
         $this->restProductOfferPricesAttributesMapperPlugins = $restProductOfferPricesAttributesMapperPlugins;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CurrentProductPriceTransfer $currentProductPriceTransfer
-     * @param \Generated\Shared\Transfer\RestProductOfferPricesAttributesTransfer $restProductOfferPricesAttributesTransfer
-     *
-     * @return \Generated\Shared\Transfer\RestProductOfferPricesAttributesTransfer
-     */
     public function mapCurrentProductPriceTransferToRestProductOfferPricesAttributesTransfer(
         CurrentProductPriceTransfer $currentProductPriceTransfer,
         RestProductOfferPricesAttributesTransfer $restProductOfferPricesAttributesTransfer
@@ -59,14 +53,6 @@ class ProductOfferPriceMapper implements ProductOfferPriceMapperInterface
         return $restProductOfferPricesAttributesTransfer;
     }
 
-    /**
-     * @param string $priceType
-     * @param int $amount
-     * @param string $currentPriceMode
-     * @param \Generated\Shared\Transfer\RestCurrencyTransfer $restCurrencyTransfer
-     *
-     * @return \Generated\Shared\Transfer\RestProductOfferPriceAttributesTransfer
-     */
     protected function createRestProductOfferPriceAttributesTransfer(
         string $priceType,
         int $amount,
@@ -91,12 +77,6 @@ class ProductOfferPriceMapper implements ProductOfferPriceMapperInterface
         return $restProductOfferPriceAttributesTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CurrentProductPriceTransfer $currentProductPriceTransfer
-     * @param \Generated\Shared\Transfer\RestProductOfferPricesAttributesTransfer $restProductOfferPricesAttributesTransfer
-     *
-     * @return \Generated\Shared\Transfer\RestProductOfferPricesAttributesTransfer
-     */
     public function executeRestProductOfferPricesAttributesMapperPlugins(
         CurrentProductPriceTransfer $currentProductPriceTransfer,
         RestProductOfferPricesAttributesTransfer $restProductOfferPricesAttributesTransfer

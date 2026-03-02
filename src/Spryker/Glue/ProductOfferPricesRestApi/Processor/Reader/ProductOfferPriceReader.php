@@ -71,14 +71,6 @@ class ProductOfferPriceReader implements ProductOfferPriceReaderInterface
      */
     protected PriceProductFilterTransferBuilderInterface $priceProductFilterTransferBuilder;
 
-    /**
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToProductOfferStorageClientInterface $productOfferStorageClient
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToProductStorageClientInterface $productStorageClient
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToPriceProductStorageClientInterface $priceProductStorageClient
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToPriceProductClientInterface $priceProductClient
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Processor\RestResponseBuilder\ProductOfferPriceRestResponseBuilderInterface $productOfferPriceRestResponseBuilder
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Processor\Builder\PriceProductFilterTransferBuilderInterface $priceProductFilterTransferBuilder
-     */
     public function __construct(
         ProductOfferPricesRestApiToProductOfferStorageClientInterface $productOfferStorageClient,
         ProductOfferPricesRestApiToProductStorageClientInterface $productStorageClient,
@@ -95,11 +87,6 @@ class ProductOfferPriceReader implements ProductOfferPriceReaderInterface
         $this->priceProductFilterTransferBuilder = $priceProductFilterTransferBuilder;
     }
 
-    /**
-     * @param \Spryker\Glue\GlueApplication\Rest\Request\Data\RestRequestInterface $restRequest
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function getProductOfferPrices(RestRequestInterface $restRequest): RestResponseInterface
     {
         $productOfferRestResource = $restRequest->findParentResourceByType(ProductOfferPricesRestApiConfig::RESOURCE_PRODUCT_OFFERS);

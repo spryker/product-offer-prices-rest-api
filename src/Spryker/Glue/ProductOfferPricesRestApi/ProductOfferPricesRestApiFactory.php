@@ -29,9 +29,6 @@ use Spryker\Glue\ProductOfferPricesRestApi\Processor\RestResponseBuilder\Product
  */
 class ProductOfferPricesRestApiFactory extends AbstractFactory
 {
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Processor\Reader\ProductOfferPriceReaderInterface
-     */
     public function createProductOfferPriceReader(): ProductOfferPriceReaderInterface
     {
         return new ProductOfferPriceReader(
@@ -44,9 +41,6 @@ class ProductOfferPricesRestApiFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Processor\Builder\PriceProductFilterTransferBuilderInterface
-     */
     public function createPriceProductFilterTransferBuilder(): PriceProductFilterTransferBuilderInterface
     {
         return new PriceProductFilterTransferBuilder(
@@ -54,9 +48,6 @@ class ProductOfferPricesRestApiFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Processor\RestResponseBuilder\ProductOfferPriceRestResponseBuilderInterface
-     */
     public function createProductOfferPriceRestResponseBuilder(): ProductOfferPriceRestResponseBuilderInterface
     {
         return new ProductOfferPriceRestResponseBuilder(
@@ -65,9 +56,6 @@ class ProductOfferPricesRestApiFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Processor\Mapper\ProductOfferPriceMapperInterface
-     */
     public function createProductOfferPriceMapper(): ProductOfferPriceMapperInterface
     {
         return new ProductOfferPriceMapper(
@@ -75,49 +63,31 @@ class ProductOfferPricesRestApiFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Processor\Expander\ProductOfferPriceExpanderInterface
-     */
     public function createProductOfferPriceExpander(): ProductOfferPriceExpanderInterface
     {
         return new ProductOfferPriceExpander($this->createProductOfferPriceReader());
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToPriceProductStorageClientInterface
-     */
     public function getPriceProductStorageClient(): ProductOfferPricesRestApiToPriceProductStorageClientInterface
     {
         return $this->getProvidedDependency(ProductOfferPricesRestApiDependencyProvider::CLIENT_PRICE_PRODUCT_STORAGE);
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToProductOfferStorageClientInterface
-     */
     public function getProductOfferStorageClient(): ProductOfferPricesRestApiToProductOfferStorageClientInterface
     {
         return $this->getProvidedDependency(ProductOfferPricesRestApiDependencyProvider::CLIENT_PRODUCT_OFFER_STORAGE);
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToProductStorageClientInterface
-     */
     public function getProductStorageClient(): ProductOfferPricesRestApiToProductStorageClientInterface
     {
         return $this->getProvidedDependency(ProductOfferPricesRestApiDependencyProvider::CLIENT_PRODUCT_STORAGE);
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToPriceProductClientInterface
-     */
     public function getPriceProductClient(): ProductOfferPricesRestApiToPriceProductClientInterface
     {
         return $this->getProvidedDependency(ProductOfferPricesRestApiDependencyProvider::CLIENT_PRICE_PRODUCT);
     }
 
-    /**
-     * @return \Spryker\Glue\ProductOfferPricesRestApi\Dependency\Client\ProductOfferPricesRestApiToCurrencyClientInterface
-     */
     public function getCurrencyClient(): ProductOfferPricesRestApiToCurrencyClientInterface
     {
         return $this->getProvidedDependency(ProductOfferPricesRestApiDependencyProvider::CLIENT_CURRENCY);

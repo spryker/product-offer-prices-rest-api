@@ -11,11 +11,6 @@ use Generated\Shared\Transfer\CurrencyTransfer;
 
 interface ProductOfferPricesRestApiToCurrencyClientInterface
 {
-    /**
-     * @param string $isoCode
-     *
-     * @return \Generated\Shared\Transfer\CurrencyTransfer
-     */
     public function fromIsoCode(string $isoCode): CurrencyTransfer;
 
     /**

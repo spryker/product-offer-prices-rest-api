@@ -30,10 +30,6 @@ class ProductOfferPriceRestResponseBuilder implements ProductOfferPriceRestRespo
      */
     protected $productOfferPriceMapper;
 
-    /**
-     * @param \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceBuilderInterface $restResourceBuilder
-     * @param \Spryker\Glue\ProductOfferPricesRestApi\Processor\Mapper\ProductOfferPriceMapperInterface $productOfferPriceMapper
-     */
     public function __construct(
         RestResourceBuilderInterface $restResourceBuilder,
         ProductOfferPriceMapperInterface $productOfferPriceMapper
@@ -42,30 +38,16 @@ class ProductOfferPriceRestResponseBuilder implements ProductOfferPriceRestRespo
         $this->productOfferPriceMapper = $productOfferPriceMapper;
     }
 
-    /**
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function createProductOfferAvailabilityEmptyRestResponse(): RestResponseInterface
     {
         return $this->restResourceBuilder->createRestResponse();
     }
 
-    /**
-     * @param \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceInterface $productOfferPriceRestResource
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function createProductOfferAvailabilityRestResponse(RestResourceInterface $productOfferPriceRestResource): RestResponseInterface
     {
         return $this->restResourceBuilder->createRestResponse()->addResource($productOfferPriceRestResource);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CurrentProductPriceTransfer $currentProductPriceTransfer
-     * @param string $productOfferReference
-     *
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResourceInterface
-     */
     public function createProductOfferPriceRestResource(
         CurrentProductPriceTransfer $currentProductPriceTransfer,
         string $productOfferReference
@@ -95,9 +77,6 @@ class ProductOfferPriceRestResponseBuilder implements ProductOfferPriceRestRespo
         return $productOfferPriceRestResource;
     }
 
-    /**
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function createProductOfferIdNotSpecifierErrorResponse(): RestResponseInterface
     {
         $restErrorMessageTransfer = (new RestErrorMessageTransfer())
@@ -108,9 +87,6 @@ class ProductOfferPriceRestResponseBuilder implements ProductOfferPriceRestRespo
         return $this->restResourceBuilder->createRestResponse()->addError($restErrorMessageTransfer);
     }
 
-    /**
-     * @return \Spryker\Glue\GlueApplication\Rest\JsonApi\RestResponseInterface
-     */
     public function createProductOfferNotFoundErrorResponse(): RestResponseInterface
     {
         $restErrorMessageTransfer = (new RestErrorMessageTransfer())

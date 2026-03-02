@@ -24,11 +24,6 @@ class ProductOfferPricesRestApiToCurrencyClientBridge implements ProductOfferPri
         $this->currencyClient = $currencyClient;
     }
 
-    /**
-     * @param string $isoCode
-     *
-     * @return \Generated\Shared\Transfer\CurrencyTransfer
-     */
     public function fromIsoCode(string $isoCode): CurrencyTransfer
     {
         return $this->currencyClient->fromIsoCode($isoCode);
