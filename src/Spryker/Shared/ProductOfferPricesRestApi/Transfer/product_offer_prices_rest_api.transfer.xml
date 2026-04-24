@@ -39,10 +39,17 @@
         <property name="price" type="int" description="The price of a product or service."/>
         <property name="prices" type="array" singular="price" description="A collection of prices, often for different currencies or price types."/>
         <property name="currency" type="Currency" description="The currency used for a transaction or price."/>
-        <property name="priceMode" type="string" description="The mode for price calculation, typically &quot;GROSS_MODE&quot; or &quot;NET_MODE&quot;."/>
+        <property name="priceMode" type="string" description="The mode for price calculation, typically 'GROSS_MODE' or 'NET_MODE'."/>
     </transfer>
 
     <transfer name="Currency">
+        <property name="code" type="string" description="A unique code, often for currency, country, or barcode."/>
+        <property name="name" type="string" description="The name of an entity (e.g., user, category, product, role)."/>
+        <property name="symbol" type="string" description="The symbol for a currency (e.g., '$', '&#x20AC;')."/>
+    </transfer>
+
+    <transfer name="Locale">
+        <property name="localeName" type="string" description="The name of a locale, such as 'en_US' or 'de_DE'."/>
     </transfer>
 
     <transfer name="RestErrorMessage">

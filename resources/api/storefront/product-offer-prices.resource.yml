@@ -1,0 +1,54 @@
+resource:
+    name: ProductOfferPrices
+    shortName: product-offer-prices
+    description: 'Storefront prices for product offers'
+
+    provider: Spryker\Glue\ProductOfferPricesRestApi\Api\Storefront\Provider\ProductOfferPricesStorefrontProvider
+
+    paginationEnabled: false
+
+    operations:
+        - type: GetCollection
+          uriTemplate: /product-offers/{productOfferReference}/product-offer-prices
+          description: 'Retrieve prices for a merchant product offer'
+
+    includableIn:
+        - resource: ProductOffers
+          relationshipName: product-offer-prices
+          uriVariableMappings:
+              productOfferReference: productOfferReference
+
+    properties:
+        productOfferReference:
+            type: string
+            identifier: true
+            writable: false
+            readable: true
+            description: 'Product offer reference (parent id)'
+            openapiContext:
+                example: 'offer5'
+
+        price:
+            type: integer
+            writable: false
+            readable: true
+            required: false
+            description: 'Default (current) price in cents'
+            openapiContext:
+                example: 12900
+
+        prices:
+            type: array
+            writable: false
+            readable: true
+            required: false
+            description: 'Collection of prices by type and currency'
+            openapiContext:
+                example:
+                    - priceTypeName: 'DEFAULT'
+                      netAmount: null
+                      grossAmount: 12900
+                      currency:
+                          code: 'EUR'
+                          name: 'Euro'
+                          symbol: '€'
