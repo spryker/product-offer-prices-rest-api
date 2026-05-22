@@ -12,12 +12,6 @@ resource:
           uriTemplate: /product-offers/{productOfferReference}/product-offer-prices
           description: 'Retrieve prices for a merchant product offer'
 
-    includableIn:
-        - resource: ProductOffers
-          relationshipName: product-offer-prices
-          uriVariableMappings:
-              productOfferReference: productOfferReference
-
     properties:
         productOfferReference:
             type: string
