@@ -13,6 +13,9 @@ use Generated\Api\Storefront\ProductOfferPricesStorefrontResource;
 use Generated\Shared\Transfer\CurrentProductPriceTransfer;
 use Generated\Shared\Transfer\PriceProductFilterTransfer;
 use Generated\Shared\Transfer\PriceProductResolveConditionsTransfer;
+use Generated\Shared\Transfer\RestCurrencyTransfer;
+use Generated\Shared\Transfer\RestProductOfferPriceAttributesTransfer;
+use Generated\Shared\Transfer\RestProductOfferPricesAttributesTransfer;
 use Spryker\ApiPlatform\Exception\GlueApiException;
 use Spryker\ApiPlatform\State\Provider\AbstractStorefrontProvider;
 use Spryker\Client\Currency\CurrencyClientInterface;
@@ -21,6 +24,8 @@ use Spryker\Client\PriceProductStorage\PriceProductStorageClientInterface;
 use Spryker\Client\ProductOfferStorage\ProductOfferStorageClientInterface;
 use Spryker\Client\ProductStorage\ProductStorageClientInterface;
 use Spryker\Glue\ProductOfferPricesRestApi\ProductOfferPricesRestApiConfig;
+use Spryker\Service\Container\Attributes\Plugins;
+use Spryker\Service\Serializer\SerializerServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductOfferPricesStorefrontProvider extends AbstractStorefrontProvider
@@ -41,20 +46,18 @@ class ProductOfferPricesStorefrontProvider extends AbstractStorefrontProvider
 
     protected const string PRICE_MODE_NET = 'NET_MODE';
 
-    protected const string KEY_VOLUME_PRICES = 'volume_prices';
-
-    protected const string KEY_VOLUME_PRICE_QUANTITY = 'quantity';
-
-    protected const string KEY_VOLUME_PRICE_NET_PRICE = 'net_price';
-
-    protected const string KEY_VOLUME_PRICE_GROSS_PRICE = 'gross_price';
-
+    /**
+     * @param array<\Spryker\Glue\ProductOfferPricesRestApiExtension\Dependency\Plugin\RestProductOfferPricesAttributesMapperPluginInterface> $restProductOfferPricesAttributesMapperPlugins
+     */
     public function __construct(
         protected ProductOfferStorageClientInterface $productOfferStorageClient,
         protected ProductStorageClientInterface $productStorageClient,
         protected PriceProductStorageClientInterface $priceProductStorageClient,
         protected PriceProductClientInterface $priceProductClient,
         protected CurrencyClientInterface $currencyClient,
+        protected SerializerServiceInterface $serializer,
+        #[Plugins(dependencyProviderMethod: 'getRestProductOfferPricesAttributesMapperPlugins')]
+        protected array $restProductOfferPricesAttributesMapperPlugins = [],
     ) {
     }
 
@@ -129,10 +132,13 @@ class ProductOfferPricesStorefrontProvider extends AbstractStorefrontProvider
         $currentProductPriceTransfer = $this->priceProductClient
             ->resolveProductPriceTransferByPriceProductFilter($priceProductTransfers, $filterTransfer);
 
-        $resource = new ProductOfferPricesStorefrontResource();
+        $restProductOfferPricesAttributesTransfer = $this->mapToRestAttributes($currentProductPriceTransfer);
+
+        $resource = $this->serializer->denormalize(
+            $restProductOfferPricesAttributesTransfer->toArray(true, true),
+            ProductOfferPricesStorefrontResource::class,
+        );
         $resource->productOfferReference = $productOfferReference;
-        $resource->price = $currentProductPriceTransfer->getPrice();
-        $resource->prices = $this->buildPricesArray($currentProductPriceTransfer);
 
         return [$resource];
     }
@@ -165,65 +171,66 @@ class ProductOfferPricesStorefrontProvider extends AbstractStorefrontProvider
         );
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
-    protected function buildPricesArray(CurrentProductPriceTransfer $currentProductPriceTransfer): array
-    {
-        $currency = $currentProductPriceTransfer->getCurrency();
-        $currencyData = $currency !== null ? [
-            'code' => $currency->getCode(),
-            'name' => $currency->getName(),
-            'symbol' => $currency->getSymbol(),
-        ] : null;
+    protected function mapToRestAttributes(
+        CurrentProductPriceTransfer $currentProductPriceTransfer,
+    ): RestProductOfferPricesAttributesTransfer {
+        $restProductOfferPricesAttributesTransfer = (new RestProductOfferPricesAttributesTransfer())
+            ->setPrice($currentProductPriceTransfer->getPrice());
 
-        $isGross = $currentProductPriceTransfer->getPriceMode() === static::PRICE_MODE_GROSS;
-        $prices = [];
+        $restCurrencyTransfer = (new RestCurrencyTransfer())
+            ->fromArray($currentProductPriceTransfer->getCurrencyOrFail()->toArray(), true);
 
         foreach ($currentProductPriceTransfer->getPrices() as $priceType => $amount) {
-            $prices[] = [
-                'priceTypeName' => $priceType,
-                'netAmount' => $isGross ? null : $amount,
-                'grossAmount' => $isGross ? $amount : null,
-                'currency' => $currencyData,
-                'volumePrices' => $this->extractVolumePrices($currentProductPriceTransfer, (string)$priceType),
-            ];
-        }
+            $restProductOfferPriceAttributesTransfer = (new RestProductOfferPriceAttributesTransfer())
+                ->setPriceTypeName((string)$priceType)
+                ->setCurrency($restCurrencyTransfer);
 
-        return $prices;
-    }
-
-    /**
-     * @return array<int, array<string, int|null>>
-     */
-    protected function extractVolumePrices(CurrentProductPriceTransfer $currentProductPriceTransfer, string $priceTypeName): array
-    {
-        $priceDataByType = $currentProductPriceTransfer->getPriceDataByPriceType();
-        $priceDataJson = $priceDataByType[$priceTypeName] ?? $currentProductPriceTransfer->getPriceData();
-
-        if ($priceDataJson === null || $priceDataJson === '') {
-            return [];
-        }
-
-        $priceData = json_decode((string)$priceDataJson, true);
-
-        if (!is_array($priceData) || !isset($priceData[static::KEY_VOLUME_PRICES]) || !is_array($priceData[static::KEY_VOLUME_PRICES])) {
-            return [];
-        }
-
-        $volumePrices = [];
-        foreach ($priceData[static::KEY_VOLUME_PRICES] as $volumePriceData) {
-            if (!is_array($volumePriceData)) {
-                continue;
+            if ($currentProductPriceTransfer->getPriceMode() !== null) {
+                $restProductOfferPriceAttributesTransfer = $this->applyPriceModeAmount(
+                    $restProductOfferPriceAttributesTransfer,
+                    $currentProductPriceTransfer->getPriceMode(),
+                    $amount,
+                );
             }
 
-            $volumePrices[] = [
-                'quantity' => isset($volumePriceData[static::KEY_VOLUME_PRICE_QUANTITY]) ? (int)$volumePriceData[static::KEY_VOLUME_PRICE_QUANTITY] : null,
-                'netAmount' => isset($volumePriceData[static::KEY_VOLUME_PRICE_NET_PRICE]) ? (int)$volumePriceData[static::KEY_VOLUME_PRICE_NET_PRICE] : null,
-                'grossAmount' => isset($volumePriceData[static::KEY_VOLUME_PRICE_GROSS_PRICE]) ? (int)$volumePriceData[static::KEY_VOLUME_PRICE_GROSS_PRICE] : null,
-            ];
+            $restProductOfferPricesAttributesTransfer->addPrice($restProductOfferPriceAttributesTransfer);
+
+            $restProductOfferPricesAttributesTransfer = $this->executeMapperPlugins(
+                $currentProductPriceTransfer,
+                $restProductOfferPricesAttributesTransfer,
+            );
         }
 
-        return $volumePrices;
+        return $restProductOfferPricesAttributesTransfer;
+    }
+
+    protected function applyPriceModeAmount(
+        RestProductOfferPriceAttributesTransfer $restProductOfferPriceAttributesTransfer,
+        string $priceMode,
+        int $amount,
+    ): RestProductOfferPriceAttributesTransfer {
+        if ($priceMode === static::PRICE_MODE_GROSS) {
+            return $restProductOfferPriceAttributesTransfer->setGrossAmount($amount);
+        }
+
+        if ($priceMode === static::PRICE_MODE_NET) {
+            return $restProductOfferPriceAttributesTransfer->setNetAmount($amount);
+        }
+
+        return $restProductOfferPriceAttributesTransfer;
+    }
+
+    protected function executeMapperPlugins(
+        CurrentProductPriceTransfer $currentProductPriceTransfer,
+        RestProductOfferPricesAttributesTransfer $restProductOfferPricesAttributesTransfer,
+    ): RestProductOfferPricesAttributesTransfer {
+        foreach ($this->restProductOfferPricesAttributesMapperPlugins as $plugin) {
+            $restProductOfferPricesAttributesTransfer = $plugin->map(
+                $currentProductPriceTransfer,
+                $restProductOfferPricesAttributesTransfer,
+            );
+        }
+
+        return $restProductOfferPricesAttributesTransfer;
     }
 }
