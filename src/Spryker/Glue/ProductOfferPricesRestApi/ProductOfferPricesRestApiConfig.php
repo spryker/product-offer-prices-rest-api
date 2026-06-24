@@ -12,11 +12,15 @@ use Spryker\Glue\Kernel\AbstractBundleConfig;
 class ProductOfferPricesRestApiConfig extends AbstractBundleConfig
 {
     /**
+     * @api
+     *
      * @var string
      */
     public const RESOURCE_PRODUCT_OFFER_PRICES = 'product-offer-prices';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Glue\MerchantProductOffersRestApi\MerchantProductOffersRestApiConfig::RESOURCE_PRODUCT_OFFERS
      *
      * @var string
@@ -24,6 +28,8 @@ class ProductOfferPricesRestApiConfig extends AbstractBundleConfig
     public const RESOURCE_PRODUCT_OFFERS = 'product-offers';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Glue\MerchantProductOffersRestApi\MerchantProductOffersRestApiConfig::RESPONSE_CODE_PRODUCT_OFFER_NOT_FOUND
      *
      * @var string
@@ -31,6 +37,8 @@ class ProductOfferPricesRestApiConfig extends AbstractBundleConfig
     public const RESPONSE_CODE_PRODUCT_OFFER_NOT_FOUND = '3701';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Glue\MerchantProductOffersRestApi\MerchantProductOffersRestApiConfig::RESPONSE_CODE_PRODUCT_OFFER_ID_IS_NOT_SPECIFIED
      *
      * @var string
@@ -38,6 +46,8 @@ class ProductOfferPricesRestApiConfig extends AbstractBundleConfig
     public const RESPONSE_CODE_PRODUCT_OFFER_ID_IS_NOT_SPECIFIED = '3702';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Glue\MerchantProductOffersRestApi\MerchantProductOffersRestApiConfig::RESPONSE_DETAIL_PRODUCT_OFFER_ID_SKU_IS_NOT_SPECIFIED
      *
      * @var string
@@ -45,6 +55,8 @@ class ProductOfferPricesRestApiConfig extends AbstractBundleConfig
     public const RESPONSE_DETAIL_PRODUCT_OFFER_ID_SKU_IS_NOT_SPECIFIED = 'Product offer ID is not specified.';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Glue\MerchantProductOffersRestApi\MerchantProductOffersRestApiConfig::RESPONSE_DETAIL_PRODUCT_OFFER_NOT_FOUND
      *
      * @var string
@@ -52,6 +64,8 @@ class ProductOfferPricesRestApiConfig extends AbstractBundleConfig
     public const RESPONSE_DETAIL_PRODUCT_OFFER_NOT_FOUND = 'Product offer not found.';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Shared\Price\PriceConfig::PRICE_MODE_NET
      *
      * @var string
@@ -59,6 +73,8 @@ class ProductOfferPricesRestApiConfig extends AbstractBundleConfig
     public const PRICE_MODE_NET = 'NET_MODE';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Shared\Price\PriceConfig::PRICE_MODE_GROSS
      *
      * @var string
