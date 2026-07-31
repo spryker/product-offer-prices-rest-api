@@ -145,10 +145,8 @@ class ProductOfferPricesStorefrontProvider extends AbstractStorefrontProvider
 
     /**
      * @throws \Spryker\ApiPlatform\Exception\GlueApiException
-     *
-     * @return never
      */
-    protected function throwMissingOfferReference(): void
+    protected function throwMissingOfferReference(): never
     {
         throw new GlueApiException(
             Response::HTTP_BAD_REQUEST,
@@ -159,10 +157,8 @@ class ProductOfferPricesStorefrontProvider extends AbstractStorefrontProvider
 
     /**
      * @throws \Spryker\ApiPlatform\Exception\GlueApiException
-     *
-     * @return never
      */
-    protected function throwOfferNotFound(): void
+    protected function throwOfferNotFound(): never
     {
         throw new GlueApiException(
             Response::HTTP_NOT_FOUND,
