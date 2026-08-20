@@ -11,6 +11,12 @@ resource:
         - type: GetCollection
           uriTemplate: /product-offers/{productOfferReference}/product-offer-prices
           description: 'Retrieve prices for a merchant product offer'
+          openapiContext:
+              responses:
+                  200:
+                      description: 'Prices of the product offer, resolved for the request currency and price mode.'
+                  404:
+                      description: 'The product offer is unknown, or its concrete product is not published.'
 
     properties:
         productOfferReference:
