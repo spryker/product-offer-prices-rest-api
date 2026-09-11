@@ -12,6 +12,22 @@ resource:
           uriTemplate: /product-offers/{productOfferReference}/product-offer-prices
           description: 'Retrieve prices for a merchant product offer'
           openapiContext:
+              parameters:
+                  - name: 'currency'
+                    in: query
+                    required: false
+                    description: 'ISO code of the currency to return prices in. Defaults to the default currency of the current store.'
+                    schema:
+                        type: string
+                    example: 'EUR'
+                  - name: 'priceMode'
+                    in: query
+                    required: false
+                    description: 'Price mode to return prices in. Defaults to the price mode of the current store.'
+                    schema:
+                        type: string
+                        enum: ['GROSS_MODE', 'NET_MODE']
+                    example: 'GROSS_MODE'
               responses:
                   200:
                       description: 'Prices of the product offer, resolved for the request currency and price mode.'
